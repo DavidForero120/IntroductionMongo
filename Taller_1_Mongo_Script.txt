@@ -1,0 +1,64 @@
+use futbolistasFamosos
+db.createCollection("surAmericanos")
+db.createCollection("norteAmericanos")
+db.createCollection("Europeos")
+
+show collections
+
+
+db.surAmericanos.insertMany([{"_id": 1, "nombre": "messi", "seleccion": "argetina", "edad":35, "club": "psg", "estatura":169},{"_id":2,"nombre": "neymar","seleccion":"brasil","edad":30, "club": "psg", "estatura":175},{"_id":3, "nombre":"luis", "seleccion":"uruguay", "edad":35, "club": "Elnacional", "estatura":182},{"_id":4, "nombre":"James", "seleccion":"Colombia", "edad":31, "club": "Olimpyacos", "estatura":180},{"_id":5, "nombre":"vinicius", "seleccion":"brasil", "edad":22, "club": "RealMadrid", "estatura":176},{"_id":6, "nombre":"luis diaz", "seleccion":"Colombia", "edad":25, "club": "Liverpool", "estatura":178},{"_id":7, "nombre":"Falcao", "seleccion":"Colombia", "edad":36 , "club": "RayoVallecano", "estatura":177},{"_id":8, "nombre":"Cavani", "seleccion":"Uruguay", "edad":35, "club": "Valencia", "estatura":184},{"_id":9, "nombre":"Dibu", "seleccion":"Argentina", "edad":30, "club": "AstonVilla", "estatura":195},{"_id":10, "nombre":"Di maria", "seleccion":"Argentina", "edad":34, "club": "Juventus", "estatura":180}])
+
+
+db.norteAmericanos.insertMany([{"_id":1,"nombre": "Lucas","seleccion":"EstadoUnidos","edad":26, "club":"WestHam", "estatura":180},{"_id":2, "nombre":"Malik", "seleccion":"Canada", "edad":28, "club":"Bayern", "estatura":191},{"_id":3, "nombre":"memo", "seleccion":"Mexico", "edad":37, "club":"AmericaMX", "estatura":190},{"_id":4, "nombre":"javier", "seleccion":"Mexico", "edad":34, "club":"Mayorca", "estatura":180},{"_id":5, "nombre":"giovanni", "seleccion":"EstadosUnidos", "edad":17, "club":"Santos", "estatura":190},{"_id":6, "nombre":"tyler", "seleccion":"EstadosUnidos", "edad":20, "club":"Queens", "estatura":196},{"_id":7, "nombre":"plisic", "seleccion":"EstadosUnidos", "edad":24, "club":"Chelsea", "estatura":177},{"_id":8, "nombre":"Canavallini", "seleccion":"Canada", "edad":28, "club":"bayern", "estatura":175},{"_id":9, "nombre":"Piette", "seleccion":"Canada", "edad":27, "club":"Vancouver", "estatura":171},{"_id":10, "nombre":"Kone", "seleccion":"Canada", "edad":27, "club":"Ajaccio", "estatura":181}])
+
+
+db.Europeos.insertMany([{"_id":1,"nombre": "Cristiano","seleccion":"Portugal","edad":37, "club":"ManchesterUnited", "estatura":187},{"_id":2, "nombre":"Mbappe", "seleccion":"Francia", "edad":23, "club":"psg", "estatura":178},{"_id":3, "nombre":"Haland", "seleccion":"Noruega", "edad":22, "club":"ManchesterCity", "estatura":194},{"_id":4, "nombre":"Benzema", "seleccion":"Francia", "edad":35, "club":"RealMadrid", "estatura":185},{"_id":5, "nombre":"Gavi", "seleccion":"España", "edad":18, "club":"Barcelona", "estatura":173},{"_id":6, "nombre":"Lewandowski", "seleccion":"Polonia", "edad":34, "club":"Barcelona", "estatura":185},{"_id":7, "nombre":"modric", "seleccion":"croacia", "edad":37, "club":"RealMadrid", "estatura":172},{"_id":8, "nombre":"Ramos", "seleccion":"España", "edad":36, "club":"psg", "estatura":185},{"_id":9, "nombre":"Bale", "seleccion":"ReinoUnido", "edad":33, "club":"RealMadrid", "estatura":185},{"_id":10, "nombre":"Kross", "seleccion":"alemania", "edad":32, "club":"RealMadrid", "estatura":183}])
+
+
+consultas
+gt->mayor que.
+db.surAmericanos.find({ edad: { $gt:26 }})
+
+eq->igual que
+db.surAmericanos.find({ club: { $eq:"psg"}})
+
+ne->distinto de
+db.surAmericanos.find({ estatura: { $ne:183}})
+
+lt->menor que
+db.norteAmericanos.find({ edad: { $lt:25}})
+
+lte->menor o igual que
+db.norteAmericanos.find({ edad: { $lte:27}})
+
+nin->no dentro de 
+db.norteAmericanos.find({ edad: { $in:[27,37]}})
+
+in->dentro de
+db.Europeos.find({ estatura: { $nin:[170,180,187]}})
+
+or->un valor u otro
+db.Europeos.find({ $or: [{club:{$eq:"psg"}},{edad:{$gt:36} }]})
+
+actualizaciones
+
+actualizar varios documentos que conicidan con el fiel->
+db.surAmericanos.updateMany({club:{$eq:"psg"}},{$set:{club: "PSG"}})
+db.surAmericanos.updateMany({estatura:{$eq:180}},{$set:{estatura:1.80}})
+
+actualizar uno->
+db.surAmericanos.updateOne({nombre: "messi"},{$set:{estatura: 170}})
+db.surAmericanos.updateOne({_id:2},{$set:{seleccion:"BRASIL"}})
+
+upsert->inserta si no encuentra el documento a actualizar
+db.surAmericanos.updateOne({"_id":{$eq:11}},{$set:{"nombre":"david","edad":18,"seleccion":"Colombia","estatura":168}},{upsert:true})
+
+Eliminar
+
+db.norteAmericanos.findOneAndDelete({"nombre":"Kone"})
+db.norteAmericanos.findOneAndDelete({"nombre":"plisic"})
+db.norteAmericanos.deleteMany({"estatura":{$eq:190}})
+db.norteAmericanos.deleteOne({"_id":9})
+db.surAmericanos.deleteOne({"_id":11})
+
+
